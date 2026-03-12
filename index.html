@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JPXMC Store | Official Webstore</title>
+    <style>
+        /* CSS VARIABLES FOR PURPLE THEME */
+        :root {
+            --bg-body: #0a0b2e;         
+            --bg-container: #232254;    
+            --bg-btn: #2d2b6b;          
+            --btn-highlight: #7158e2;   
+            --text-main: #e2e8f0;
+            --text-muted: #a19bc7;
+            --accent-pink: #d946ef;
+            --card-bg: #1a1942; 
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.04) 2px, transparent 3px),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.04) 2px, transparent 3px);
+            background-size: 100px 100px;
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            display: flex; justify-content: center; align-items: center;
+            padding: 50px 20px; max-width: 1200px; margin: 0 auto; position: relative;
+        }
+
+        .main-logo {
+            max-width: 400px; width: 100%; z-index: 10;
+            animation: floatMain 4s ease-in-out infinite;
+        }
+
+        @keyframes floatMain {
+            0%, 100% { transform: translateY(0); filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); }
+            50% { transform: translateY(-10px); filter: drop-shadow(0 15px 25px rgba(113, 88, 226, 0.5)); }
+        }
+
+        .info-wrapper {
+            display: flex; justify-content: space-between; width: 100%;
+            position: absolute; top: 50%; transform: translateY(-50%);
+            padding: 0 5%; box-sizing: border-box; z-index: 5; pointer-events: none; 
+        }
+
+        .server-info { display: flex; align-items: center; gap: 15px; pointer-events: auto; }
+        .info-icon {
+            background-color: #fff; color: var(--bg-body); width: 45px; height: 45px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem; font-weight: bold;
+        }
+
+        .info-text { display: flex; flex-direction: column; font-size: 0.9rem; text-align: left; }
+        .info-text span:first-child { color: var(--text-muted); }
+        .info-text span:last-child { color: var(--text-main); font-weight: bold; }
+
+        /* --- MAIN LAYOUT --- */
+        .main-wrapper {
+            display: flex; max-width: 1100px; margin: 0 auto; gap: 30px; padding: 0 20px 60px 20px;
+        }
+
+        /* --- SIDEBAR NAVIGATION --- */
+        .sidebar {
+            flex: 1; min-width: 280px; background-color: var(--bg-container);
+            padding: 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 12px;
+            height: fit-content; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .nav-btn {
+            display: flex; align-items: center; background-color: var(--bg-btn);
+            padding: 16px 20px; border-radius: 8px; color: var(--text-muted);
+            font-weight: 600; font-size: 1.05rem; gap: 15px; position: relative;
+            overflow: hidden; transition: 0.3s; cursor: pointer; border: none; width: 100%; text-align: left;
+        }
+        
+        .nav-btn::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+            background-color: var(--btn-highlight); border-radius: 8px 0 0 8px;
+            opacity: 0.3; transition: 0.3s;
+        }
+
+        .nav-btn:hover, .nav-btn.active { color: var(--accent-pink); background-color: #35327a; }
+        .nav-btn:hover::before, .nav-btn.active::before { opacity: 1; box-shadow: 0 0 10px var(--btn-highlight); }
+        .nav-icon { font-size: 1.3rem; }
+
+        /* --- CONTENT AREA & TABS --- */
+        .content {
+            flex: 2.5; background-color: var(--bg-container); padding: 40px;
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .tab-content { display: none; animation: fadeIn 0.4s ease-out; }
+        .tab-content.active-tab { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content h2 { margin-top: 0; color: var(--accent-pink); font-size: 1.8rem; margin-bottom: 20px; }
+        .tab-content p { color: var(--text-muted); font-size: 1.05rem; }
+        
+        .feature-box { background-color: var(--bg-btn); padding: 25px; border-radius: 8px; margin-top: 30px; }
+        .feature-list { list-style: none; padding: 0; margin: 0; }
+        .feature-list li { margin-bottom: 10px; color: var(--text-muted); }
+        .feature-list li::before { content: '✔ '; color: var(--text-main); font-weight: bold; }
+
+        /* --- CARDS STYLES (USED FOR RANKS AND KEYS) --- */
+        .ranks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+        .rank-card {
+            background-color: var(--card-bg); border-radius: 10px; padding: 20px;
+            display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        }
+        .rank-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); border-color: #5f27cd; }
+        .rank-img {
+            width: 100%; max-width: 150px; margin: 0 auto 15px auto; display: block;
+            border-radius: 8px; background-color: #2d2b6b; aspect-ratio: 1/1; object-fit: cover;
+        }
+        .rank-title {
+            text-align: center; font-size: 1.2rem; font-weight: 800; color: #fff;
+            text-transform: uppercase; margin: 0 0 5px 0; letter-spacing: 1px;
+        }
+        .rank-price { text-align: center; color: #7158e2; font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; }
+        .rank-actions { display: flex; gap: 10px; margin-top: auto; }
+        .info-btn {
+            background-color: #2d2b6b; color: #a19bc7; border: none; border-radius: 6px;
+            width: 45px; height: 40px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+        }
+        .info-btn:hover { background-color: #3f3c96; color: #fff; }
+        .purchase-btn {
+            background-color: #5f27cd; color: #fff; border: none; border-radius: 6px;
+            flex-grow: 1; font-weight: bold; font-size: 1rem; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; gap: 8px; transition: 0.3s;
+        }
+        .purchase-btn:hover { background-color: #481ea1; }
+
+        /* --- INFO MODAL (KIT PREVIEW) STYLES --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .modal-box {
+            background-color: var(--bg-container); border: 1px solid var(--btn-highlight);
+            border-radius: 12px; width: 90%; max-width: 450px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8); animation: modalPop 0.3s ease-out; overflow: hidden;
+        }
+        @keyframes modalPop {
+            from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; }
+        }
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 20px; background-color: var(--bg-btn); border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .modal-header h3 { margin: 0; font-size: 1.1rem; color: #fff; letter-spacing: 1px; text-transform: uppercase; }
+        .close-btn { 
+            background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; transition: 0.3s; padding: 0;
+        }
+        .close-btn:hover { color: #ef4444; }
+        .modal-body { padding: 20px; max-height: 70vh; overflow-y: auto; }
+        
+        .kit-preview-container {
+            background-color: #1a1942; border-radius: 8px; padding: 10px;
+            border: 2px solid #0a0b2e; margin-bottom: 20px; text-align: center;
+        }
+        .inventory-title { color: #a19bc7; font-size: 0.8rem; margin-bottom: 10px; text-transform: uppercase; font-weight: bold; text-align: left;}
+        
+        .real-kit-image {
+            width: 100%; border-radius: 4px; border: 2px solid #2d2b6b; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: block;
+        }
+
+        .modal-desc { font-style: italic; color: #d946ef; margin-bottom: 15px; text-align: center; font-size: 0.95rem; }
+        .modal-perks { list-style: none; padding: 0; margin: 0; }
+        .modal-perks li { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; color: var(--text-main); font-size: 0.95rem; }
+        .modal-perks li::before { content: '🔹'; font-size: 0.8rem; }
+
+        /* --- FOOTER & FIX LOGO ANIMATION --- */
+        footer { background-color: #17163b; padding: 50px 20px 20px 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-top { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; margin-bottom: 40px; }
+        .footer-col { flex: 1; min-width: 200px; }
+        .footer-col h3 { margin-bottom: 20px; font-size: 1.2rem; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-col ul li { margin-bottom: 10px; }
+        .footer-col ul li a { color: var(--text-muted); text-decoration: none; cursor: pointer; }
+        .footer-col ul li a:hover { color: var(--text-main); }
+        .footer-center { display: flex; justify-content: center; align-items: center; }
+        
+        .footer-logo { 
+            max-width: 200px; 
+            display: inline-block; 
+            position: relative;
+            animation: floatFooterIntense 3s ease-in-out infinite; 
+            transform-origin: center center;
+        }
+
+        @keyframes floatFooterIntense {
+            0%, 100% { transform: translateY(0) scale(1); filter: drop-shadow(0 0 10px rgba(217, 70, 239, 0.4)); }
+            50% { transform: translateY(-15px) scale(1.05); filter: drop-shadow(0 0 30px rgba(217, 70, 239, 1)); }
+        }
+
+        .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px; color: var(--text-muted); font-size: 0.9rem; }
+
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; padding: 30px 20px; }
+            .info-wrapper { position: static; transform: none; flex-direction: column; align-items: center; gap: 15px; padding: 0; margin-bottom: 30px; }
+            .main-wrapper { flex-direction: column; }
+            .sidebar { width: 100%; box-sizing: border-box; }
+            .footer-top { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero">
+        <div class="info-wrapper">
+            <div class="server-info info-left">
+                <div class="info-icon">▶</div>
+                <div class="info-text">
+                    <span>play.jpxmc.fun:25588</span>
+                    <span id="mc-players">Fetching Players...</span>
+                </div>
+            </div>
+            <a href="https://discord.gg/uB5YkvEDTs" target="_blank" style="text-decoration: none;">
+                <div class="server-info info-right">
+                    <div class="info-icon" style="background-color: transparent; font-size: 2.5rem;">💬</div>
+                    <div class="info-text">
+                        <span>Discord Server</span>
+                        <span id="discord-players">Fetching Members...</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <img src="logo.png" alt="JPXMC Network" class="main-logo" onerror="this.src='https://via.placeholder.com/400x200?text=JPXMC+LOGO'">
+    </div>
+
+    <div class="main-wrapper">
+        <div class="sidebar">
+            <button class="nav-btn active" onclick="switchTab('tab-home', this)"><span class="nav-icon">🏠</span> Home</button>
+            <button class="nav-btn" onclick="switchTab('tab-ranks', this)"><span class="nav-icon">🏆</span> Ranks</button>
+            <button class="nav-btn" onclick="switchTab('tab-keys', this)"><span class="nav-icon">🗝️</span> Keys</button>
+        </div>
+
+        <div class="content">
+            <div id="tab-home" class="tab-content active-tab">
+                <h2>About JPXMC</h2>
+                <p>JPXMC is a competitive and fun Minecraft survival server built for players who love progression, PvP, grinding, and community. Our ranks and crates are designed to enhance your experience without breaking game balance.</p>
+                <div class="feature-box">
+                    <h3 style="color: #fff; margin-top: 0;">Why Choose JPXMC?</h3>
+                    <ul class="feature-list">
+                        <li>Lag-Free Experience</li>
+                        <li>24/7 Online Server</li>
+                        <li>Balanced Rank System</li>
+                        <li>Secure Payment System</li>
+                        <li>Active Support Team</li>
+                        <li>Regular Updates</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="tab-ranks" class="tab-content">
+                <h2>Server Ranks</h2>
+                <p>Select a rank below to dominate your survival journey.</p>
+                <div class="ranks-grid">
+                    <div class="rank-card">
+                        <img src="warrior.jpg" alt="Warrior Rank" class="rank-img" onerror="this.src='https://via.placeholder.com/150?text=Warrior'">
+                        <h3 class="rank-title">Warrior Rank</h3>
+                        <div class="rank-price">₹99.00</div>
+                        <div class="rank-actions">
+                            <button class="info-btn" onclick="openInfo('warrior')">ℹ</button>
+                            <button class="purchase-btn">🛒 Purchase</button>
+                        </div>
+                    </div>
+                    <div class="rank-card">
+                        <img src="jadugar.jpg" alt="Jadugar Rank" class="rank-img" onerror="this.src='https://via.placeholder.com/150?text=Jadugar'">
+                        <h3 class="rank-title">Jadugar Rank</h3>
+                        <div class="rank-price">₹199.00</div>
+                        <div class="rank-actions">
+                            <button class="info-btn" onclick="openInfo('jadugar')">ℹ</button>
+                            <button class="purchase-btn">🛒 Purchase</button>
+                        </div>
+                    </div>
+                    <div class="rank-card">
+                        <img src="monster.jpg" alt="Monster Rank" class="rank-img" onerror="this.src='https://via.placeholder.com/150?text=Monster'">
+                        <h3 class="rank-title">Monster Rank</h3>
+                        <div class="rank-price">₹299.00</div>
+                        <div class="rank-actions">
+                            <button class="info-btn" onclick="openInfo('monster')">ℹ</button>
+                            <button class="purchase-btn">🛒 Purchase</button>
+                        </div>
+                    </div>
+                    <div class="rank-card">
+                        <img src="immortal.jpg" alt="Immortal Rank" class="rank-img" onerror="this.src='https://via.placeholder.com/150?text=Immortal'">
+                        <h3 class="rank-title">Immortal Rank</h3>
+                        <div class="rank-price">₹399.00</div>
+                        <div class="rank-actions">
+                            <button class="info-btn" onclick="openInfo('immortal')">ℹ</button>
+                            <button class="purchase-btn">🛒 Purchase</button>
+                        </div>
+                    </div>
+                    <div class="rank-card">
+                        <img src="jpxarmy.jpg" alt="JPX Army Rank" class="rank-img" onerror="this.src='https://via.placeholder.com/150?text=JPX+Army'">
+                        <h3 class="rank-title">JPXArmy Rank</h3>
+                        <div class="rank-price">₹999.00</div>
+                        <div class="rank-actions">
+                            <button class="info-btn" onclick="openInfo('jpxarmy')">ℹ</button>
+                            <button class="purchase-btn">🛒 Purchase</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-keys" class="tab-content">
+                <h2>Crate Keys</h2>
+                <p>Unlock epic rewards at spawn! Try your luck with our exclusive crates.</p>
+                <div class="ranks-grid">
+                    
+                    <div class="rank-card">
+                        <img src="kattapa.jpg" alt="Kattapa Crate" class="rank-img" onerror="this.src='https://via.placeholder.com/150?text=Kattapa'">
+                        <h3 class="rank-title">Kattapa Crate</h3>
+                        <div class="rank-price">₹20.00</div>
+                        <div class="rank-actions">
+                            <button class="info-btn" onclick="openInfo('kattapa_crate')">ℹ</button>
+                            <button class="purchase-btn">🛒 Purchase</button>
+                        </div>
+                    </div>
+
+                    <div class="rank-card">
+                        <img src="armour.jpg" alt="Armour Crate" class="rank-img" onerror="this.src='https://via.placeholder.com/150?text=Armour'">
+                        <h3 class="rank-title">Armour Crate</h3>
+                        <div class="rank-price">₹30.00</div>
+                        <div class="rank-actions">
+                            <button class="info-btn" onclick="openInfo('armour_crate')">ℹ</button>
+                            <button class="purchase-btn">🛒 Purchase</button>
+                        </div>
+                    </div>
+
+                    <div class="rank-card">
+                        <img src="bahubali.jpg" alt="Bahubali Crate" class="rank-img" onerror="this.src='https://via.placeholder.com/150?text=Bahubali'">
+                        <h3 class="rank-title">Bahubali Crate</h3>
+                        <div class="rank-price">₹40.00</div>
+                        <div class="rank-actions">
+                            <button class="info-btn" onclick="openInfo('bahubali_crate')">ℹ</button>
+                            <button class="purchase-btn">🛒 Purchase</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="info-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-title">INFO</h3>
+                <button class="close-btn" onclick="closeInfo()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="kit-preview-container">
+                    <div class="inventory-title">Content Preview</div>
+                    <img id="modal-kit-img" src="" alt="Contents" class="real-kit-image" onerror="this.src='https://via.placeholder.com/400x200?text=Missing+Image'">
+                </div>
+                <p class="modal-desc" id="modal-desc">Rise above all and unlock god-like powers!</p>
+                <ul class="modal-perks" id="modal-perks"></ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-top">
+            <div class="footer-col">
+                <h3>Useful Links:</h3>
+                <ul>
+                    <li><a onclick="switchTab('tab-home', document.querySelectorAll('.nav-btn')[0])">Home</a></li>
+                    <li><a onclick="switchTab('tab-ranks', document.querySelectorAll('.nav-btn')[1])">Ranks</a></li>
+                    <li><a onclick="switchTab('tab-keys', document.querySelectorAll('.nav-btn')[2])">Keys</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-center">
+                <img src="logo.png" alt="JPXMC Network" class="footer-logo" onerror="this.style.display='none'">
+            </div>
+            <div class="footer-col">
+                <h3>About Us</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">JPXMC is a competitive and fun Minecraft survival server built for players who love progression, PvP, grinding, and community.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2026<br><strong style="color: #fff;">JPXMC Store | Official Webstore</strong></div>
+    </footer>
+
+    <script>
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active-tab'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active-tab');
+            if(btnElement) btnElement.classList.add('active');
+        }
+
+        const rankData = {
+            'warrior': {
+                title: 'WARRIOR RANK KIT',
+                desc: 'Begin your journey with the essential warrior gear!',
+                image: 'kit-warrior.jpg', 
+                perks: ['3x Vaults', '3x Homes', 'Anvil Access (/anvil)', 'Warrior Kit', 'Special Prefix']
+            },
+            'jadugar': {
+                title: 'JADUGAR RANK KIT',
+                desc: 'Harness the magical arts and dominate the server!',
+                image: 'kit-jadugar.jpg',
+                perks: ['4x Vaults', '4x Homes', 'Anvil Access (/anvil)', 'Crafting Access (/craft)', 'Jadugar Kit']
+            },
+            'monster': {
+                title: 'MONSTER RANK KIT',
+                desc: 'Unleash the beast within with monstrous power!',
+                image: 'kit-monster.jpg',
+                perks: ['5x Vaults', '5x Homes', 'Anvil & Crafting Access', 'Monster Kit', 'Tab Priority']
+            },
+            'immortal': {
+                title: 'IMMORTAL RANK KIT',
+                desc: 'Become undefeatable with immortal gear!',
+                image: 'kit-immortal.jpg',
+                perks: ['6x Vaults', '6x Homes', 'Anvil & Crafting Access', 'Immortal Kit', 'Higher Tab Priority']
+            },
+            'jpxarmy': {
+                title: 'JPXARMY RANK KIT',
+                desc: 'Rise above all and unlock god-like powers!',
+                image: 'kit-jpxarmy.jpg',
+                perks: ['7x Vaults', '7x Homes', 'Anvil Access (/anvil)', 'Crafting Access (/craft)', 'Smithing Table Access (/smithingtable)', '5x Auction House Slots', 'JPXARMY Kit']
+            },
+            'kattapa_crate': {
+                title: 'KATTAPA CRATE CONTENTS',
+                desc: 'Check out the epic Kattappa Gear and its god-level enchantments!',
+                images: ['kattapa-info-1.jpg', 'kattapa-info-2.jpg'], 
+                perks: ['God-Tier Enchanted Armor', 'Protection IV & Unbreaking III', 'Chance to win Ranks', 'Server-wide announcement']
+            },
+            'bahubali_crate': {
+                title: 'BAHUBALI CRATE CONTENTS',
+                desc: 'Legendary rewards! Unleash the power of rare spawners.',
+                images: ['bahubali-info-1.jpg', 'bahubali-info-2.jpg'], 
+                perks: ['Rare Evoker Spawners', 'Insane XP & Emerald Drops', 'High Value Economy Items', 'The Ultimate Flex']
+            },
+            // 🔥 NEW ARMOUR CRATE DATA 🔥
+            'armour_crate': {
+                title: 'ARMOUR CRATE CONTENTS',
+                desc: 'Equip yourself with the ultimate Trimmed Netherite gear!',
+                images: ['armour-info-1.jpg', 'armour-info-2.jpg'], 
+                perks: ['Silence Armor Trim', 'Protection IV & Unbreaking III', 'Mending Enchantment', 'In-game Worth: $1.00K']
+            }
+        };
+
+        function openInfo(rankId) {
+            const data = rankData[rankId];
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-desc').innerText = data.desc;
+            
+            const imageContainer = document.querySelector('.kit-preview-container');
+            const singleImage = document.getElementById('modal-kit-img');
+            
+            // Clean up any old images
+            imageContainer.querySelectorAll('img.real-kit-image').forEach(img => {
+                if (img !== singleImage) img.remove();
+            });
+
+            if (data.image) {
+                // Single image logic
+                singleImage.style.display = 'block';
+                singleImage.src = data.image;
+            } else if (data.images && data.images.length > 0) {
+                // Multiple images logic
+                singleImage.style.display = 'none';
+                data.images.forEach(imgSrc => {
+                    const newImg = document.createElement('img');
+                    newImg.src = imgSrc;
+                    newImg.classList.add('real-kit-image');
+                    newImg.style.marginBottom = '15px'; 
+                    newImg.onerror = function(){ this.src='https://via.placeholder.com/400x200?text=Missing+Image'; };
+                    imageContainer.appendChild(newImg);
+                });
+            }
+
+            const perksList = document.getElementById('modal-perks');
+            perksList.innerHTML = '';
+            data.perks.forEach(perk => { perksList.innerHTML += `<li>${perk}</li>`; });
+
+            document.getElementById('info-modal').style.display = 'flex';
+        }
+
+        function closeInfo() { document.getElementById('info-modal').style.display = 'none'; }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('info-modal');
+            if (event.target == modal) { modal.style.display = "none"; }
+        }
+
+        // Live Players Code
+        const serverIP = 'play.jpxmc.fun';
+        const mcElement = document.getElementById('mc-players');
+        fetch(`https://api.mcsrvstat.us/2/${serverIP}`).then(r => r.json()).then(data => {
+            if (data.online) { mcElement.innerText = `${data.players.online} Players Online`; mcElement.style.color = '#4ade80'; } 
+            else { mcElement.innerText = `0 Players Online`; mcElement.style.color = '#f87171'; }
+        }).catch(() => { mcElement.innerText = `Status Unavailable`; });
+
+        const discordServerID = '1320448100527833139'; 
+        const discordElement = document.getElementById('discord-players');
+        fetch(`https://discord.com/api/guilds/${discordServerID}/widget.json`).then(r => {
+            if (!r.ok) throw new Error('Widget disabled'); return r.json();
+        }).then(data => {
+            discordElement.innerText = `${data.presence_count} Members Online`; discordElement.style.color = '#4ade80'; 
+        }).catch(() => { discordElement.innerText = `Join our Community`; });
+    </script>
+</body>
+</html>
